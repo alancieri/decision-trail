@@ -1,0 +1,219 @@
+{
+  "common": {
+    "appName": "Decision Trail",
+    "tagline": "Make impact visible before it becomes a problem",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "actions": "Actions",
+    "noResults": "No results",
+    "confirmDelete": "Are you sure you want to delete?",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "auth": {
+    "login": "Sign in",
+    "logout": "Sign out",
+    "email": "Email",
+    "checkEmail": "Check your email",
+    "magicLinkDescription": "Enter your email to receive a sign-in link",
+    "magicLinkSent": "We've sent you a magic link. Click the link in your email to sign in.",
+    "magicLinkInfo": "No password to remember. We'll send you a secure link via email.",
+    "sendMagicLink": "Send sign-in link",
+    "useDifferentEmail": "Use a different email"
+  },
+  "workspace": {
+    "title": "Workspace",
+    "titlePlural": "Workspaces",
+    "yours": "Your Workspaces",
+    "create": "New workspace",
+    "createTitle": "Create workspace",
+    "createDescription": "A workspace is a separate environment for your team's impacts.",
+    "name": "Workspace name",
+    "namePlaceholder": "E.g. Acme Corp",
+    "role": "Role",
+    "roleOwner": "Owner",
+    "roleMember": "Member",
+    "switchTo": "Switch to",
+    "current": "Current",
+    "impactCount": "{count, plural, =0 {No Impact} one {1 Impact} other {# Impacts}}",
+    "memberCount": "{count, plural, =0 {No members} one {1 member} other {# members}}",
+    "settings": "Settings",
+    "settingsTitle": "Workspace Settings",
+    "rename": "Rename workspace",
+    "renameDescription": "Change the name of your workspace.",
+    "leave": "Leave workspace",
+    "leaveDescription": "You will no longer have access to this workspace.",
+    "leaveConfirm": "Are you sure you want to leave this workspace?",
+    "leaveLastOwnerError": "You cannot leave as the last owner. Transfer ownership first or delete the workspace.",
+    "delete": "Delete workspace",
+    "deleteDescription": "Permanently delete this workspace and all its data.",
+    "deleteConfirm": "Are you sure you want to delete this workspace? This action cannot be undone.",
+    "deleteTypeName": "Type the workspace name to confirm:",
+    "dangerZone": "Danger Zone",
+    "manage": "Manage workspaces",
+    "goToDashboard": "Go to dashboard",
+    "empty": {
+      "title": "No workspaces",
+      "description": "You don't have access to any workspace yet."
+    }
+  },
+  "members": {
+    "title": "Members",
+    "description": "Manage workspace members and their roles.",
+    "list": "Team members",
+    "invite": "Invite member",
+    "inviteTitle": "Invite new member",
+    "inviteDescription": "Send an invitation to join this workspace.",
+    "inviteEmail": "Email address",
+    "inviteEmailPlaceholder": "colleague@example.com",
+    "inviteRole": "Role",
+    "inviteSend": "Send invitation",
+    "inviteSuccess": "Invitation sent successfully",
+    "inviteError": "Failed to send invitation",
+    "pending": "Pending invitations",
+    "pendingEmpty": "No pending invitations",
+    "pendingExpires": "Expires {date}",
+    "cancelInvite": "Cancel invitation",
+    "cancelInviteConfirm": "Are you sure you want to cancel this invitation?",
+    "changeRole": "Change role",
+    "remove": "Remove member",
+    "removeConfirm": "Are you sure you want to remove this member?",
+    "you": "(you)",
+    "joined": "Joined {date}",
+    "alreadyMember": "This user is already a member of the workspace"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "impacts": "Impacts"
+  },
+  "impact": {
+    "title": "Impact",
+    "list": "Impact List",
+    "create": "New Impact",
+    "createTitle": "Create new Impact",
+    "editTitle": "Edit Impact",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Briefly describe the event or decision",
+    "description": "Description",
+    "descriptionPlaceholder": "Add details if needed",
+    "sourceType": "Source type",
+    "createdAt": "Created on",
+    "updatedAt": "Updated on",
+    "createdBy": "Created by",
+    "archive": "Archive",
+    "archived": "Archived",
+    "empty": {
+      "title": "No Impacts",
+      "description": "Start by creating your first Impact to track decisions and changes.",
+      "cta": "Create first Impact"
+    }
+  },
+  "sourceType": {
+    "decision": "Decision",
+    "incident": "Incident",
+    "audit": "Audit",
+    "requirement": "Requirement",
+    "organizational": "Organizational",
+    "technical": "Technical",
+    "near_miss": "Near miss"
+  },
+  "status": {
+    "draft": "Draft",
+    "assessed": "Assessed",
+    "actions_open": "Actions open",
+    "closed": "Closed"
+  },
+  "areaState": {
+    "to_review": "To review",
+    "impacted": "Impacted",
+    "not_impacted": "Not impacted"
+  },
+  "area": {
+    "title": "ISMS Areas",
+    "progress": "{completed} of {total} assessed",
+    "asset_tools": {
+      "label": "Assets & Tools",
+      "guidance": "Does this change introduce new IT assets, software, hardware or tools? Does it modify existing assets? Does it require updating the asset inventory?"
+    },
+    "information_data": {
+      "label": "Information & Data",
+      "guidance": "Are new types of data involved? Does it change the classification of existing data? Does it impact backups, retention or data transfers?"
+    },
+    "access_privileges": {
+      "label": "Access & Privileges",
+      "guidance": "Does it require new access or permissions? Does it modify existing roles? Does it impact authentication, authorization or segregation of duties?"
+    },
+    "process_controls": {
+      "label": "Processes & Controls",
+      "guidance": "Does it modify existing operational processes? Does it require new controls? Does it impact change management, incident response or continuity procedures?"
+    },
+    "risk_impact": {
+      "label": "Risk & Impact",
+      "guidance": "Does it introduce new risks? Does it modify the existing risk profile? Does it require updating the risk assessment?"
+    },
+    "policies_docs": {
+      "label": "Policies & Documentation",
+      "guidance": "Does it require updating policies, procedures or guidelines? Does it impact ISMS documentation? Does it need new documentation?"
+    },
+    "people_awareness": {
+      "label": "People & Awareness",
+      "guidance": "Does it require training? Does it impact roles and responsibilities? Does it need communication or skills update?"
+    }
+  },
+  "action": {
+    "title": "Actions",
+    "create": "New action",
+    "description": "Description",
+    "descriptionPlaceholder": "What needs to be done?",
+    "owner": "Owner",
+    "dueDate": "Due date",
+    "status": "Status",
+    "statusOpen": "Open",
+    "statusDone": "Done",
+    "markDone": "Mark as done",
+    "reopen": "Reopen",
+    "empty": "No actions",
+    "openCount": "{count, plural, =0 {No open actions} one {1 open action} other {# open actions}}"
+  },
+  "reference": {
+    "title": "References",
+    "create": "Add reference",
+    "label": "Label",
+    "labelPlaceholder": "E.g. Security Policy",
+    "url": "URL",
+    "urlPlaceholder": "https://...",
+    "empty": "No references"
+  },
+  "validation": {
+    "required": "Required field",
+    "invalidEmail": "Invalid email",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordMatch": "Passwords don't match",
+    "urlInvalid": "Invalid URL"
+  },
+  "error": {
+    "generic": "An error occurred",
+    "notFound": "Page not found",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Access denied"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "displayName": "How should we refer to you?",
+    "displayNameDescription": "This is optional. If set, it will be shown instead of your email.",
+    "displayNamePlaceholder": "E.g. John Doe",
+    "language": "Language",
+    "languageDescription": "Choose your preferred language for the interface.",
+    "accountInfo": "Account information",
+    "memberSince": "Member since",
+    "saved": "Changes saved successfully"
+  }
+}

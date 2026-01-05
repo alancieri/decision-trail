@@ -1,26 +1,332 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* =============================================================================
+   DECISION TRAIL - Design System
+   Ispirato a Clerk.com - OKLCH color space
+   Primary: Viola Clerk-style (hue 286 in OKLCH)
+
+   IMPORTANT: In Tailwind v4, @theme is processed at build time.
+   CSS variables with var() won't work in @theme for dynamic theming.
+   Instead, we define colors directly and use CSS variables only for
+   runtime theming (light/dark mode switching).
+   ============================================================================= */
+
+/* =============================================================================
+   CSS VARIABLES - For runtime theming (light/dark mode)
+   These are used by components that reference var(--primary) etc.
+   ============================================================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.625rem;
+
+  /* PRIMARY - Viola Clerk-style (hue 286) */
+  --primary: oklch(0.60 0.23 286);
+  --primary-foreground: oklch(0.99 0.01 286);
+
+  /* BACKGROUNDS */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+
+  /* SURFACES */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+
+  /* BORDERS */
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.60 0.23 286);
+
+  /* SECONDARY & ACCENT */
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+
+  /* DESTRUCTIVE - aligned with --error (hue 25) */
+  --destructive: oklch(0.55 0.20 25);
+  --destructive-foreground: oklch(0.55 0.20 25);
+
+  /* TEXT COLORS */
+  --text-primary: oklch(0.145 0 0);
+  --text-secondary: oklch(0.45 0.01 270);
+  --text-tertiary: oklch(0.60 0.008 270);
+  --text-disabled: oklch(0.70 0.005 270);
+
+  /* SEMANTIC COLORS - HUE: green=145, yellow=95, red=25, info=270 */
+  --success: oklch(0.60 0.18 145);
+  --success-soft: oklch(0.95 0.04 145);
+  --success-text: oklch(0.35 0.12 145);
+  --warning: oklch(0.75 0.18 95);
+  --warning-soft: oklch(0.95 0.05 95);
+  --warning-text: oklch(0.45 0.14 95);
+  --error: oklch(0.55 0.20 25);
+  --error-soft: oklch(0.95 0.04 25);
+  --error-text: oklch(0.45 0.18 25);
+  --info: oklch(0.60 0.15 270);
+  --info-soft: oklch(0.95 0.03 270);
+  --info-text: oklch(0.40 0.12 270);
+
+  /* IMPACT STATES - Uses same semantic hues */
+  --state-to-review: oklch(0.70 0.15 95);
+  --state-to-review-soft: oklch(0.95 0.04 95);
+  --state-impacted: oklch(0.55 0.18 25);
+  --state-impacted-soft: oklch(0.95 0.03 25);
+  --state-not-impacted: oklch(0.60 0.15 145);
+  --state-not-impacted-soft: oklch(0.95 0.03 145);
+
+  /* CHARTS */
+  --chart-1: oklch(0.60 0.23 286);
+  --chart-2: oklch(0.60 0.18 145);
+  --chart-3: oklch(0.75 0.18 95);
+  --chart-4: oklch(0.55 0.20 25);
+  --chart-5: oklch(0.60 0.15 270);
+
+  /* AVATAR PALETTE - 12 colori ben distanziati per avatar utenti (ogni 30° di hue) */
+  /* Modifica gli hue per personalizzare i colori */
+  --avatar-0: oklch(0.65 0.20 0);     /* Rosso */
+  --avatar-1: oklch(0.65 0.18 30);    /* Arancione scuro */
+  --avatar-2: oklch(0.68 0.18 60);    /* Arancione */
+  --avatar-3: oklch(0.72 0.18 90);    /* Giallo/Lime */
+  --avatar-4: oklch(0.65 0.18 120);   /* Verde lime */
+  --avatar-5: oklch(0.65 0.18 150);   /* Verde */
+  --avatar-6: oklch(0.65 0.15 180);   /* Teal/Ciano */
+  --avatar-7: oklch(0.60 0.18 210);   /* Blu chiaro */
+  --avatar-8: oklch(0.58 0.18 240);   /* Blu */
+  --avatar-9: oklch(0.60 0.20 270);   /* Viola */
+  --avatar-10: oklch(0.62 0.22 300);  /* Magenta */
+  --avatar-11: oklch(0.65 0.22 330);  /* Rosa/Fucsia */
+
+  /* SIDEBAR */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.60 0.23 286);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
+.dark {
+  /* PRIMARY - Viola Clerk-style (lighter for dark mode) */
+  --primary: oklch(0.65 0.24 286);
+  --primary-foreground: oklch(0.10 0.01 286);
+
+  /* BACKGROUNDS */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+
+  /* SURFACES */
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+
+  /* BORDERS */
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.65 0.24 286);
+
+  /* SECONDARY & ACCENT */
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+
+  /* DESTRUCTIVE - aligned with --error (hue 25) */
+  --destructive: oklch(0.60 0.20 25);
+  --destructive-foreground: oklch(0.75 0.16 25);
+
+  /* TEXT */
+  --text-primary: oklch(0.985 0 0);
+  --text-secondary: oklch(0.70 0.01 270);
+  --text-tertiary: oklch(0.55 0.01 270);
+  --text-disabled: oklch(0.40 0.008 270);
+
+  /* SEMANTIC - HUE: green=145, yellow=95, red=25, info=270 */
+  --success: oklch(0.65 0.18 145);
+  --success-soft: oklch(0.25 0.06 145);
+  --success-text: oklch(0.75 0.14 145);
+  --warning: oklch(0.75 0.18 95);
+  --warning-soft: oklch(0.25 0.06 95);
+  --warning-text: oklch(0.80 0.14 95);
+  --error: oklch(0.60 0.20 25);
+  --error-soft: oklch(0.25 0.06 25);
+  --error-text: oklch(0.75 0.16 25);
+  --info: oklch(0.65 0.15 270);
+  --info-soft: oklch(0.25 0.05 270);
+  --info-text: oklch(0.75 0.12 270);
+
+  /* IMPACT STATES - Uses same semantic hues */
+  --state-to-review: oklch(0.75 0.15 95);
+  --state-to-review-soft: oklch(0.25 0.05 95);
+  --state-impacted: oklch(0.60 0.18 25);
+  --state-impacted-soft: oklch(0.25 0.05 25);
+  --state-not-impacted: oklch(0.65 0.15 145);
+  --state-not-impacted-soft: oklch(0.25 0.05 145);
+
+  /* CHARTS */
+  --chart-1: oklch(0.65 0.24 286);
+  --chart-2: oklch(0.65 0.18 145);
+  --chart-3: oklch(0.75 0.18 95);
+  --chart-4: oklch(0.60 0.20 25);
+  --chart-5: oklch(0.65 0.15 270);
+
+  /* AVATAR PALETTE - 12 colori (dark mode - leggermente più luminosi) */
+  --avatar-0: oklch(0.70 0.20 0);     /* Rosso */
+  --avatar-1: oklch(0.70 0.18 30);    /* Arancione scuro */
+  --avatar-2: oklch(0.73 0.18 60);    /* Arancione */
+  --avatar-3: oklch(0.77 0.18 90);    /* Giallo/Lime */
+  --avatar-4: oklch(0.70 0.18 120);   /* Verde lime */
+  --avatar-5: oklch(0.70 0.18 150);   /* Verde */
+  --avatar-6: oklch(0.70 0.15 180);   /* Teal/Ciano */
+  --avatar-7: oklch(0.65 0.18 210);   /* Blu chiaro */
+  --avatar-8: oklch(0.63 0.18 240);   /* Blu */
+  --avatar-9: oklch(0.65 0.20 270);   /* Viola */
+  --avatar-10: oklch(0.67 0.22 300);  /* Magenta */
+  --avatar-11: oklch(0.70 0.22 330);  /* Rosa/Fucsia */
+
+  /* SIDEBAR */
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.65 0.24 286);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* =============================================================================
+   TAILWIND THEME - Build-time theme configuration
+   Maps CSS variables to Tailwind utility classes
+   ============================================================================= */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Map CSS variables to Tailwind colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* =============================================================================
+   BASE STYLES
+   ============================================================================= */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1 {
+    @apply text-3xl font-bold tracking-tight;
+    color: var(--text-primary);
+  }
+  h2 {
+    @apply text-2xl font-semibold tracking-tight;
+    color: var(--text-primary);
+  }
+  h3 {
+    @apply text-xl font-semibold;
+    color: var(--text-primary);
+  }
+  h4 {
+    @apply text-lg font-medium;
+    color: var(--text-primary);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =============================================================================
+   COMPONENT STYLES
+   ============================================================================= */
+@layer components {
+  /* Impact state badges */
+  .badge-to-review {
+    background-color: var(--state-to-review-soft);
+    color: var(--warning-text);
+    border-color: var(--state-to-review);
+  }
+  .badge-impacted {
+    background-color: var(--state-impacted-soft);
+    color: var(--error-text);
+    border-color: var(--state-impacted);
+  }
+  .badge-not-impacted {
+    background-color: var(--state-not-impacted-soft);
+    color: var(--success-text);
+    border-color: var(--state-not-impacted);
+  }
+
+  /* Interactive card */
+  .card-interactive {
+    @apply transition-shadow duration-200;
+    &:hover {
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  /* Focus ring */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  /* Text utilities */
+  .text-primary-color {
+    color: var(--text-primary);
+  }
+  .text-secondary-color {
+    color: var(--text-secondary);
+  }
+  .text-tertiary-color {
+    color: var(--text-tertiary);
+  }
 }

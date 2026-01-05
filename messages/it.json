@@ -1,0 +1,220 @@
+{
+  "common": {
+    "appName": "Decision Trail",
+    "tagline": "Rendi visibile l'impatto prima che diventi un problema",
+    "loading": "Caricamento...",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "create": "Crea",
+    "back": "Indietro",
+    "close": "Chiudi",
+    "search": "Cerca",
+    "filter": "Filtra",
+    "actions": "Azioni",
+    "noResults": "Nessun risultato",
+    "confirmDelete": "Sei sicuro di voler eliminare?",
+    "yes": "Sì",
+    "no": "No"
+  },
+  "auth": {
+    "login": "Accedi",
+    "logout": "Esci",
+    "email": "Email",
+    "checkEmail": "Controlla la tua email",
+    "magicLinkDescription": "Inserisci la tua email per ricevere un link di accesso",
+    "magicLinkSent": "Ti abbiamo inviato un link magico. Clicca sul link nell'email per accedere.",
+    "magicLinkInfo": "Nessuna password da ricordare. Ti invieremo un link sicuro via email.",
+    "sendMagicLink": "Invia link di accesso",
+    "useDifferentEmail": "Usa un'altra email"
+  },
+  "workspace": {
+    "title": "Workspace",
+    "titlePlural": "Workspace",
+    "yours": "I tuoi Workspace",
+    "create": "Nuovo workspace",
+    "createTitle": "Crea workspace",
+    "createDescription": "Un workspace è un ambiente separato per gli impact del tuo team.",
+    "name": "Nome workspace",
+    "namePlaceholder": "Es. Acme Srl",
+    "role": "Ruolo",
+    "roleOwner": "Owner",
+    "roleMember": "Membro",
+    "switchTo": "Passa a",
+    "current": "Corrente",
+    "impactCount": "{count, plural, =0 {Nessun Impact} one {1 Impact} other {# Impact}}",
+    "memberCount": "{count, plural, =0 {Nessun membro} one {1 membro} other {# membri}}",
+    "settings": "Impostazioni",
+    "settingsTitle": "Impostazioni Workspace",
+    "rename": "Rinomina workspace",
+    "renameDescription": "Modifica il nome del workspace.",
+    "leave": "Abbandona workspace",
+    "leaveDescription": "Non avrai più accesso a questo workspace.",
+    "leaveConfirm": "Sei sicuro di voler abbandonare questo workspace?",
+    "leaveLastOwnerError": "Non puoi abbandonare il workspace come ultimo owner. Trasferisci prima la proprietà o elimina il workspace.",
+    "delete": "Elimina workspace",
+    "deleteDescription": "Elimina permanentemente questo workspace e tutti i suoi dati.",
+    "deleteConfirm": "Sei sicuro di voler eliminare questo workspace? Questa azione non può essere annullata.",
+    "deleteTypeName": "Digita il nome del workspace per confermare:",
+    "dangerZone": "Zona pericolosa",
+    "newNamePrompt": "Nome del nuovo workspace:",
+    "createError": "Impossibile creare il workspace",
+    "goToDashboard": "Vai alla dashboard",
+    "empty": {
+      "title": "Nessun workspace",
+      "description": "Non hai ancora accesso a nessun workspace."
+    }
+  },
+  "members": {
+    "title": "Membri",
+    "description": "Gestisci i membri del workspace e i loro ruoli.",
+    "list": "Membri del team",
+    "invite": "Invita membro",
+    "inviteTitle": "Invita nuovo membro",
+    "inviteDescription": "Invia un invito per unirsi a questo workspace.",
+    "inviteEmail": "Indirizzo email",
+    "inviteEmailPlaceholder": "collega@esempio.com",
+    "inviteRole": "Ruolo",
+    "inviteSend": "Invia invito",
+    "inviteSuccess": "Invito inviato con successo",
+    "inviteError": "Impossibile inviare l'invito",
+    "pending": "Inviti in attesa",
+    "pendingEmpty": "Nessun invito in attesa",
+    "pendingExpires": "Scade il {date}",
+    "cancelInvite": "Annulla invito",
+    "cancelInviteConfirm": "Sei sicuro di voler annullare questo invito?",
+    "changeRole": "Cambia ruolo",
+    "remove": "Rimuovi membro",
+    "removeConfirm": "Sei sicuro di voler rimuovere questo membro?",
+    "you": "(tu)",
+    "joined": "Iscritto il {date}",
+    "alreadyMember": "Questo utente è già membro del workspace"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "impacts": "Impact"
+  },
+  "impact": {
+    "title": "Impact",
+    "list": "Lista Impact",
+    "create": "Nuovo Impact",
+    "createTitle": "Crea nuovo Impact",
+    "editTitle": "Modifica Impact",
+    "titleLabel": "Titolo",
+    "titlePlaceholder": "Descrivi brevemente l'evento o la decisione",
+    "description": "Descrizione",
+    "descriptionPlaceholder": "Aggiungi dettagli se necessario",
+    "sourceType": "Tipo origine",
+    "createdAt": "Creato il",
+    "updatedAt": "Aggiornato il",
+    "createdBy": "Creato da",
+    "archive": "Archivia",
+    "archived": "Archiviato",
+    "empty": {
+      "title": "Nessun Impact",
+      "description": "Inizia creando il tuo primo Impact per tracciare decisioni e cambiamenti.",
+      "cta": "Crea il primo Impact"
+    }
+  },
+  "sourceType": {
+    "decision": "Decisione",
+    "incident": "Incidente",
+    "audit": "Audit",
+    "requirement": "Requisito",
+    "organizational": "Organizzativo",
+    "technical": "Tecnico",
+    "near_miss": "Near miss"
+  },
+  "status": {
+    "draft": "Bozza",
+    "assessed": "Valutato",
+    "actions_open": "Azioni aperte",
+    "closed": "Chiuso"
+  },
+  "areaState": {
+    "to_review": "Da valutare",
+    "impacted": "Impattato",
+    "not_impacted": "Non impattato"
+  },
+  "area": {
+    "title": "Aree ISMS",
+    "progress": "{completed} di {total} valutate",
+    "asset_tools": {
+      "label": "Asset & strumenti",
+      "guidance": "Questo cambiamento introduce nuovi asset IT, software, hardware o strumenti? Modifica asset esistenti? Richiede aggiornamento dell'inventario asset?"
+    },
+    "information_data": {
+      "label": "Informazioni & dati",
+      "guidance": "Sono coinvolti nuovi tipi di dati? Cambia la classificazione di dati esistenti? Impatta su backup, retention o trasferimenti di dati?"
+    },
+    "access_privileges": {
+      "label": "Accessi & privilegi",
+      "guidance": "Richiede nuovi accessi o permessi? Modifica ruoli esistenti? Impatta su autenticazione, autorizzazione o segregation of duties?"
+    },
+    "process_controls": {
+      "label": "Processi & controlli",
+      "guidance": "Modifica processi operativi esistenti? Richiede nuovi controlli? Impatta su procedure di change management, incident response o continuità?"
+    },
+    "risk_impact": {
+      "label": "Rischio & impatto",
+      "guidance": "Introduce nuovi rischi? Modifica il profilo di rischio esistente? Richiede aggiornamento della valutazione dei rischi?"
+    },
+    "policies_docs": {
+      "label": "Policy & documentazione",
+      "guidance": "Richiede aggiornamento di policy, procedure o linee guida? Impatta sulla documentazione ISMS? Necessita di nuova documentazione?"
+    },
+    "people_awareness": {
+      "label": "Persone & consapevolezza",
+      "guidance": "Richiede formazione? Impatta su ruoli e responsabilità? Necessita di comunicazione o aggiornamento delle competenze?"
+    }
+  },
+  "action": {
+    "title": "Azioni",
+    "create": "Nuova azione",
+    "description": "Descrizione",
+    "descriptionPlaceholder": "Cosa deve essere fatto?",
+    "owner": "Responsabile",
+    "dueDate": "Scadenza",
+    "status": "Stato",
+    "statusOpen": "Aperta",
+    "statusDone": "Completata",
+    "markDone": "Segna come completata",
+    "reopen": "Riapri",
+    "empty": "Nessuna azione",
+    "openCount": "{count, plural, =0 {Nessuna azione aperta} one {1 azione aperta} other {# azioni aperte}}"
+  },
+  "reference": {
+    "title": "Riferimenti",
+    "create": "Aggiungi riferimento",
+    "label": "Etichetta",
+    "labelPlaceholder": "Es. Policy di sicurezza",
+    "url": "URL",
+    "urlPlaceholder": "https://...",
+    "empty": "Nessun riferimento"
+  },
+  "validation": {
+    "required": "Campo obbligatorio",
+    "invalidEmail": "Email non valida",
+    "passwordMin": "La password deve avere almeno 8 caratteri",
+    "passwordMatch": "Le password non corrispondono",
+    "urlInvalid": "URL non valido"
+  },
+  "error": {
+    "generic": "Si è verificato un errore",
+    "notFound": "Pagina non trovata",
+    "unauthorized": "Non autorizzato",
+    "forbidden": "Accesso negato"
+  },
+  "preferences": {
+    "title": "Preferenze",
+    "displayName": "Come preferisci essere chiamato?",
+    "displayNameDescription": "È opzionale. Se impostato, verrà mostrato al posto della tua email.",
+    "displayNamePlaceholder": "Es. Mario Rossi",
+    "language": "Lingua",
+    "languageDescription": "Scegli la lingua preferita per l'interfaccia.",
+    "accountInfo": "Informazioni account",
+    "memberSince": "Membro dal",
+    "saved": "Modifiche salvate con successo"
+  }
+}

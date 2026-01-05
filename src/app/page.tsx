@@ -1,65 +1,170 @@
-import Image from "next/image";
+import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Shield, CheckCircle, FileText, Users } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { getAvatarColor } from "@/lib/utils";
 
-export default function Home() {
+function getInitials(name: string | null | undefined, email: string): string {
+  if (name) {
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  }
+  return email.slice(0, 2).toUpperCase();
+}
+
+export default async function Home() {
+  const t = await getTranslations();
+  const supabase = await createClient();
+
+  // Check if user is authenticated
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Get profile if logged in
+  let profile: { display_name: string | null } | null = null;
+  if (user) {
+    const { data } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("id", user.id)
+      .single();
+    profile = data;
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border">
+        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Shield className="h-8 w-8 text-primary" strokeWidth={2.5} />
+            <span className="text-xl font-semibold text-slate-800">
+              {t("common.appName")}
+            </span>
+          </div>
+          {user ? (
+            <Link href="/workspaces" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                {t("nav.dashboard")}
+              </span>
+              <Avatar className="w-8 h-8">
+                <AvatarFallback
+                  className="text-white text-xs font-medium"
+                  style={{ backgroundColor: getAvatarColor(user.id) }}
+                >
+                  {getInitials(profile?.display_name, user.email || "")}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          ) : (
+            <Link href="/auth/login">
+              <Button>{t("auth.login")}</Button>
+            </Link>
+          )}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </header>
+
+      {/* Hero */}
+      <main>
+        <section className="py-24 px-6">
+          <div className="mx-auto max-w-4xl text-center">
+            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-slate-800 mb-6">
+              Make impact visible
+              <br />
+              <span className="text-primary">before it becomes a problem.</span>
+            </h1>
+            <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
+              Decision Trail ti aiuta a tracciare decisioni, cambiamenti e
+              incidenti, valutandone l&apos;impatto sull&apos;ISMS in modo
+              strutturato e difendibile in audit.
+            </p>
+            <Link href={user ? "/workspaces" : "/auth/login"}>
+              <Button size="lg" className="px-8">
+                {user ? t("workspace.goToDashboard") : t("auth.login")}
+              </Button>
+            </Link>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section className="py-20 px-6 bg-slate-50">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-3xl font-semibold text-center text-slate-800 mb-12">
+              Un metodo strutturato per ogni valutazione
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <FeatureCard
+                icon={<CheckCircle className="h-8 w-8 text-primary" />}
+                title="7 aree ISMS"
+                description="Valuta sistematicamente ogni area: asset, dati, accessi, processi, rischi, documentazione, persone."
+              />
+              <FeatureCard
+                icon={<FileText className="h-8 w-8 text-primary" />}
+                title="Traccia le azioni"
+                description="Non dimenticare mai un'azione. Ogni valutazione genera task tracciabili fino alla chiusura."
+              />
+              <FeatureCard
+                icon={<Users className="h-8 w-8 text-primary" />}
+                title="Multi-workspace"
+                description="Gestisci più clienti o progetti in workspace separati. Perfetto per consulenti ISO 27001."
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-20 px-6">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-semibold text-slate-800 mb-4">
+              Pronto per iniziare?
+            </h2>
+            <p className="text-lg text-slate-600 mb-8">
+              Crea il tuo primo Impact in meno di un minuto.
+            </p>
+            <Link href={user ? "/workspaces" : "/auth/login"}>
+              <Button size="lg" className="px-8">
+                {user ? t("workspace.goToDashboard") : t("auth.login")}
+              </Button>
+            </Link>
+          </div>
+        </section>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-border py-8 px-6">
+        <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Shield className="h-5 w-5 text-slate-400" />
+            <span className="text-sm text-slate-500">
+              Decision Trail © {new Date().getFullYear()}
+            </span>
+          </div>
+          <p className="text-sm text-slate-500">{t("common.tagline")}</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+      <div className="mb-4">{icon}</div>
+      <h3 className="text-lg font-semibold text-slate-800 mb-2">{title}</h3>
+      <p className="text-slate-600">{description}</p>
     </div>
   );
 }
