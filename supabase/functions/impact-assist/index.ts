@@ -22,14 +22,17 @@ interface ImpactAssistRequest {
   workspaceId: string;
 }
 
+// AI suggestion values (preview only, not saved to DB)
+type AISuggestionValue = "not_sure" | "to_review" | "likely_impacted";
+
 interface AreaSuggestion {
-  asset_tools: "to_review" | "impacted" | "not_impacted";
-  information_data: "to_review" | "impacted" | "not_impacted";
-  access_privileges: "to_review" | "impacted" | "not_impacted";
-  process_controls: "to_review" | "impacted" | "not_impacted";
-  risk_impact: "to_review" | "impacted" | "not_impacted";
-  policies_docs: "to_review" | "impacted" | "not_impacted";
-  people_awareness: "to_review" | "impacted" | "not_impacted";
+  asset_tools: AISuggestionValue;
+  information_data: AISuggestionValue;
+  access_privileges: AISuggestionValue;
+  process_controls: AISuggestionValue;
+  risk_impact: AISuggestionValue;
+  policies_docs: AISuggestionValue;
+  people_awareness: AISuggestionValue;
 }
 
 interface SuggestedAction {
@@ -59,26 +62,95 @@ const corsHeaders = {
 // System Prompt
 // -----------------------------------------------------------------------------
 
-const SYSTEM_PROMPT = `You are an ISMS (Information Security Management System) expert assistant.
-Your role is to help users understand the potential impact of decisions, changes, or incidents on their organization's information security posture.
+const SYSTEM_PROMPT = `You are a pragmatic tech advisor helping CTOs and engineering leads understand the operational impact of decisions and changes.
 
-When analyzing a decision or change, you should:
-1. Create a concise, audit-friendly summary (title) that captures the essence of the decision
-2. Provide context about how this decision might affect the organization's security posture (2-6 lines)
-3. Generate 2-4 clarifying questions that would help better assess the impact
-4. Suggest which ISMS areas might be impacted (use "to_review" for areas that need human assessment, "impacted" for clearly affected areas, "not_impacted" for areas clearly not affected)
-5. Suggest up to 3 concrete follow-up actions
+LANGUAGE:
+- Write ALL JSON string values in the SAME LANGUAGE as the user's input.
 
-The 7 ISMS areas are:
-- asset_tools: IT assets, software, hardware, tools
-- information_data: Data types, classification, backup, retention, transfers
-- access_privileges: Access rights, permissions, authentication, authorization
-- process_controls: Operational processes, change management, incident response, continuity
-- risk_impact: Risk profile, risk assessment
-- policies_docs: Policies, procedures, guidelines, documentation
-- people_awareness: Training, roles, responsibilities, communication
+ROLE & TONE:
+- Direct and practical (like a senior engineer talking to peers)
+- Focus on "what actually changes" and "what could break"
+- Avoid compliance jargon, audit-speak, or consultant language
+- Do NOT sound prescriptive or authoritative (avoid: "ensure", "guarantee", "make sure", "prestare attenzione", "assicurare")
 
-Always respond in the same language as the input. Be concise but thorough.`;
+OUTPUT RULES (STRICT):
+- Return ONLY a valid JSON object (no markdown, no explanations, no extra text).
+- The JSON MUST match the required schema and include all fields.
+- Limits:
+  - clarifying_questions: 0–4 items
+  - suggested_actions: 0–3 items
+
+SUMMARY RULES:
+- Exactly ONE sentence.
+- Must start with a label in the user's language:
+  - Italian: "Decisione: ..." (default) or "Evento: ..." if it clearly isn't a decision.
+  - English: "Decision: ..." or "Event: ..."
+- Neutral, audit-friendly, no value judgment.
+
+AI_CONTEXT RULES (CONCRETE, CTO-LIKE):
+- Be specific about HOW things change and what could break.
+- Focus on: access/provisioning (SSO/SCIM), data migration scope (what moves vs archive), integrations (Slack, repo, CI/CD, webhooks), logging/retention (if relevant).
+- Prefer 2–6 short bullet-like sentences.
+- Keep ai_context short and UI-friendly: MAX ~800 characters.
+- No generic security statements.
+- Avoid generic phrases like:
+  - Italian: "cambiamento significativo", "perdita di informazioni se non gestito correttamente", "prestare attenzione", "assicurare/garantire"
+  - English: "significant change", "data loss if not handled properly", "ensure", "make sure"
+- Prefer concrete specifics when relevant:
+  - migration scope: database/pagine/allegati/storico (or equivalent)
+  - access & provisioning: SSO/SCIM vs local accounts, role mapping
+  - integrations: Slack, repos, CI/CD, webhooks/automations
+  - coexistence: old tool read-only, new tool primary
+
+CLARIFYING QUESTIONS:
+- Ask questions a CTO would naturally ask.
+- No ISO jargon. No compliance-speak.
+
+SUGGESTED ACTIONS:
+- Each action is an object: { "description": string, "area_key": string | null }.
+- description MUST start with an infinitive verb in the user's language.
+- Actions must be actionable and specific.
+- area_key can be null if the action is cross-area or uncertain.
+- AREA KEY RULE (important):
+  - If an action mentions integrations/workflows/automations or tools like Slack, CI/CD, webhooks, pipelines, repositories,
+    then area_key MUST be "process_controls" (not "asset_tools").
+
+THE 7 AREAS TO CONSIDER (keys are fixed):
+- asset_tools: Systems, software, hardware, infrastructure
+- information_data: Data flows, storage, backups, data handling
+- access_privileges: Who can access what, permissions, auth, SSO/SCIM
+- process_controls: Procedures, workflows, operational process changes
+- risk_impact: What could go wrong, dependencies, blast radius
+- policies_docs: Documentation that needs updating
+- people_awareness: Training, comms, who needs to know
+
+AREA SUGGESTIONS (SELECTIVE):
+- Allowed values ONLY: "not_sure" | "to_review" | "likely_impacted"
+- Use "likely_impacted" for MAX 2–3 areas that are clearly and directly affected.
+- Use "to_review" for plausible impacts needing human judgment.
+- Use "not_sure" when there's not enough information.
+- Never mark everything as "likely_impacted".
+- Heuristic:
+  - If the input implies a tool/process change affecting multiple users, default people_awareness to "to_review" (not "not_sure").
+
+REQUIRED JSON SCHEMA:
+{
+  "summary": "string",
+  "ai_context": "string",
+  "clarifying_questions": ["string"],
+  "area_suggestions": {
+    "asset_tools": "not_sure|to_review|likely_impacted",
+    "information_data": "not_sure|to_review|likely_impacted",
+    "access_privileges": "not_sure|to_review|likely_impacted",
+    "process_controls": "not_sure|to_review|likely_impacted",
+    "risk_impact": "not_sure|to_review|likely_impacted",
+    "policies_docs": "not_sure|to_review|likely_impacted",
+    "people_awareness": "not_sure|to_review|likely_impacted"
+  },
+  "suggested_actions": [
+    { "description": "string", "area_key": "asset_tools|information_data|access_privileges|process_controls|risk_impact|policies_docs|people_awareness|null" }
+  ]
+}`;
 
 // -----------------------------------------------------------------------------
 // Main Handler
@@ -175,39 +247,71 @@ serve(async (req: Request) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4-turbo-preview",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           {
             role: "user",
-            content: `Analyze the following decision/change and provide a structured ISMS impact assessment. Respond with a JSON object matching this structure:
-{
-  "summary": "Concise audit-friendly title (max 100 chars)",
-  "ai_context": "2-6 lines explaining how this affects the system",
-  "clarifying_questions": ["question1", "question2", ...], // max 4
-  "area_suggestions": {
-    "asset_tools": "to_review|impacted|not_impacted",
-    "information_data": "to_review|impacted|not_impacted",
-    "access_privileges": "to_review|impacted|not_impacted",
-    "process_controls": "to_review|impacted|not_impacted",
-    "risk_impact": "to_review|impacted|not_impacted",
-    "policies_docs": "to_review|impacted|not_impacted",
-    "people_awareness": "to_review|impacted|not_impacted"
-  },
-  "suggested_actions": [
-    { "description": "Action description", "area_key": "area_key or null" }
-  ] // max 3 actions
-}
+            content: `Analyze this decision/change:
 
-Decision/Change to analyze:
 """
 ${freeText}
 """`,
           },
         ],
-        temperature: 0.7,
+        temperature: 0.3,
         max_tokens: 1500,
-        response_format: { type: "json_object" },
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "impact_assist",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              required: ["summary", "ai_context", "clarifying_questions", "area_suggestions", "suggested_actions"],
+              properties: {
+                summary: { type: "string" },
+                ai_context: { type: "string" },
+                clarifying_questions: {
+                  type: "array",
+                  items: { type: "string" },
+                  maxItems: 4
+                },
+                area_suggestions: {
+                  type: "object",
+                  additionalProperties: false,
+                  required: ["asset_tools", "information_data", "access_privileges", "process_controls", "risk_impact", "policies_docs", "people_awareness"],
+                  properties: {
+                    asset_tools: { type: "string", enum: ["not_sure", "to_review", "likely_impacted"] },
+                    information_data: { type: "string", enum: ["not_sure", "to_review", "likely_impacted"] },
+                    access_privileges: { type: "string", enum: ["not_sure", "to_review", "likely_impacted"] },
+                    process_controls: { type: "string", enum: ["not_sure", "to_review", "likely_impacted"] },
+                    risk_impact: { type: "string", enum: ["not_sure", "to_review", "likely_impacted"] },
+                    policies_docs: { type: "string", enum: ["not_sure", "to_review", "likely_impacted"] },
+                    people_awareness: { type: "string", enum: ["not_sure", "to_review", "likely_impacted"] }
+                  }
+                },
+                suggested_actions: {
+                  type: "array",
+                  maxItems: 3,
+                  items: {
+                    type: "object",
+                    additionalProperties: false,
+                    required: ["description", "area_key"],
+                    properties: {
+                      description: { type: "string" },
+                      area_key: {
+                        type: ["string", "null"],
+                        enum: ["asset_tools", "information_data", "access_privileges", "process_controls", "risk_impact", "policies_docs", "people_awareness", null]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
       }),
     });
 
@@ -225,19 +329,28 @@ ${freeText}
       openaiData.choices[0].message.content
     );
 
+    // Helper to validate AI suggestion values
+    const validSuggestions: AISuggestionValue[] = ["not_sure", "to_review", "likely_impacted"];
+    const validateSuggestion = (val: unknown): AISuggestionValue => {
+      if (typeof val === "string" && validSuggestions.includes(val as AISuggestionValue)) {
+        return val as AISuggestionValue;
+      }
+      return "to_review"; // fallback
+    };
+
     // Validate and sanitize response
     const response: ImpactAssistResponse = {
       summary: (aiResult.summary || "").slice(0, 200),
       ai_context: (aiResult.ai_context || "").slice(0, 2000),
       clarifying_questions: (aiResult.clarifying_questions || []).slice(0, 4),
       area_suggestions: {
-        asset_tools: aiResult.area_suggestions?.asset_tools || "to_review",
-        information_data: aiResult.area_suggestions?.information_data || "to_review",
-        access_privileges: aiResult.area_suggestions?.access_privileges || "to_review",
-        process_controls: aiResult.area_suggestions?.process_controls || "to_review",
-        risk_impact: aiResult.area_suggestions?.risk_impact || "to_review",
-        policies_docs: aiResult.area_suggestions?.policies_docs || "to_review",
-        people_awareness: aiResult.area_suggestions?.people_awareness || "to_review",
+        asset_tools: validateSuggestion(aiResult.area_suggestions?.asset_tools),
+        information_data: validateSuggestion(aiResult.area_suggestions?.information_data),
+        access_privileges: validateSuggestion(aiResult.area_suggestions?.access_privileges),
+        process_controls: validateSuggestion(aiResult.area_suggestions?.process_controls),
+        risk_impact: validateSuggestion(aiResult.area_suggestions?.risk_impact),
+        policies_docs: validateSuggestion(aiResult.area_suggestions?.policies_docs),
+        people_awareness: validateSuggestion(aiResult.area_suggestions?.people_awareness),
       },
       suggested_actions: (aiResult.suggested_actions || []).slice(0, 3).map((action) => ({
         description: (action.description || "").slice(0, 500),

@@ -5,8 +5,12 @@
 
 import type { Database } from "./database";
 
-// Area state type from database
+// Area state type from database (final state, set by human)
 export type AreaState = Database["public"]["Enums"]["area_state"];
+
+// AI suggestion values (preview only, not saved to DB)
+// These guide the user's thinking but don't determine the final state
+export type AISuggestionValue = "not_sure" | "to_review" | "likely_impacted";
 
 // ISMS Area keys
 export type AreaKey =
@@ -43,15 +47,16 @@ export interface ImpactAssistRequest {
 
 /**
  * Area suggestions from AI - one suggestion per ISMS area
+ * These are DRAFT values to guide user thinking, not final states
  */
 export interface AreaSuggestions {
-  asset_tools: AreaState;
-  information_data: AreaState;
-  access_privileges: AreaState;
-  process_controls: AreaState;
-  risk_impact: AreaState;
-  policies_docs: AreaState;
-  people_awareness: AreaState;
+  asset_tools: AISuggestionValue;
+  information_data: AISuggestionValue;
+  access_privileges: AISuggestionValue;
+  process_controls: AISuggestionValue;
+  risk_impact: AISuggestionValue;
+  policies_docs: AISuggestionValue;
+  people_awareness: AISuggestionValue;
 }
 
 /**
@@ -180,6 +185,6 @@ export interface NewDecisionPreviewState {
   clarifyingQuestions: string[];
   /** Draft actions user can edit/include/exclude */
   draftActions: DraftAction[];
-  /** Area suggestions (read-only in preview, all shown as to_review) */
+  /** Area suggestions from AI (read-only in preview, guides user thinking) */
   areaSuggestions: AreaSuggestions;
 }

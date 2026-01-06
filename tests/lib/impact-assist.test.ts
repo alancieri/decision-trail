@@ -91,13 +91,13 @@ describe("impact-assist API client", () => {
         ai_context: "Test context",
         clarifying_questions: ["Q1", "Q2"],
         area_suggestions: {
-          asset_tools: "to_review",
+          asset_tools: "likely_impacted",
           information_data: "to_review",
-          access_privileges: "to_review",
-          process_controls: "to_review",
+          access_privileges: "likely_impacted",
+          process_controls: "not_sure",
           risk_impact: "to_review",
           policies_docs: "to_review",
-          people_awareness: "to_review",
+          people_awareness: "likely_impacted",
         },
         suggested_actions: [{ description: "Action 1", area_key: null }],
       };
