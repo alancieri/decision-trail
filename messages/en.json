@@ -27,7 +27,8 @@
     "magicLinkSent": "We've sent you a magic link. Click the link in your email to sign in.",
     "magicLinkInfo": "No password to remember. We'll send you a secure link via email.",
     "sendMagicLink": "Send sign-in link",
-    "useDifferentEmail": "Use a different email"
+    "useDifferentEmail": "Use a different email",
+    "registrationClosed": "Registration is closed. Contact the administrator to receive an invitation."
   },
   "workspace": {
     "title": "Workspace",
@@ -215,5 +216,76 @@
     "accountInfo": "Account information",
     "memberSince": "Member since",
     "saved": "Changes saved successfully"
+  },
+  "landing": {
+    "hero": {
+      "headline1": "Make impact visible",
+      "headline2": "before it becomes a problem.",
+      "subheadline": "Decision Trail helps you capture everyday decisions, changes, and incidents — and reason about their potential ISMS impact before they escalate.",
+      "seeHow": "See how it works",
+      "screenshotPlaceholder": "Screenshot coming soon"
+    },
+    "problem": {
+      "title": "Most ISMS issues don't start as incidents.",
+      "intro": "They start as small decisions:",
+      "item1": "changing a tool",
+      "item2": "modifying an access rule",
+      "item3": "onboarding a supplier",
+      "item4": "skipping a control \"just this once\"",
+      "conclusion": "Without a clear trail of reasoning, these decisions become hard to explain — especially later, during reviews or audits."
+    },
+    "whatItDoes": {
+      "title": "Decision Trail creates a reasoning trail, not just a log.",
+      "subtitle": "Every decision leaves a trace. Decision Trail helps you make that trace meaningful, structured, and ready for when it matters most.",
+      "item1": {
+        "title": "Capture in real-time",
+        "description": "Log decisions, changes, and near-misses as they happen — before context is lost."
+      },
+      "item2": {
+        "title": "AI-assisted reasoning",
+        "description": "Get help identifying potential ISMS impact areas and asking the right questions."
+      },
+      "item3": {
+        "title": "Auditable by design",
+        "description": "Keep a clear trail of why something was decided — ready for reviews and audits."
+      },
+      "item4": {
+        "title": "Human in control",
+        "description": "Nothing is automatic. You review, adjust, and decide what gets documented."
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "step1": {
+        "title": "Describe what happened",
+        "description": "Write a short, free-text description of a decision or event."
+      },
+      "step2": {
+        "title": "Get guided reasoning",
+        "description": "The AI helps you rephrase the situation, ask the right questions, and highlight areas that may require attention."
+      },
+      "step3": {
+        "title": "Decide and document",
+        "description": "You stay in control. Review, adjust, and save the reasoning trail."
+      }
+    },
+    "whoFor": {
+      "title": "Who Decision Trail is for",
+      "intro": "Decision Trail is designed for:",
+      "item1": "CTOs and Technical Leads",
+      "item2": "ISMS / Information Security Managers",
+      "item3": "Security-aware startup and scale-up teams",
+      "conclusion": "If you are responsible for decisions that may impact security or compliance, Decision Trail fits naturally into your workflow."
+    },
+    "whatItIsNot": {
+      "title": "What Decision Trail is not",
+      "item1": "Not a certification tool",
+      "item2": "Not an automated compliance engine",
+      "item3": "Not a replacement for human judgment",
+      "conclusion": "Decision Trail supports thinking — it does not replace responsibility."
+    },
+    "earlyStage": {
+      "text": "Decision Trail is currently in early access and evolving through real-world use and feedback."
+    }
   }
 }
