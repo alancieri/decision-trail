@@ -94,7 +94,26 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "impacts": "Impact"
+    "impacts": "Impact",
+    "newDecision": "Nuova decisione"
+  },
+  "newDecision": {
+    "title": "Cosa vuoi analizzare?",
+    "subtitle": "Descrivi una decisione e l'AI identificherà i potenziali impatti",
+    "placeholder": "Es. Stiamo passando da Slack a Microsoft Teams...",
+    "analyzeButton": "Analizza",
+    "suggestions": {
+      "vendor": "Cambio fornitore",
+      "policy": "Nuova policy",
+      "incident": "Incidente sicurezza",
+      "tool": "Nuovo strumento"
+    },
+    "examples": {
+      "vendor": "Stiamo cambiando il nostro cloud provider da AWS a Google Cloud Platform",
+      "policy": "Stiamo introducendo una nuova policy di lavoro remoto che permette lo smart working permanente",
+      "incident": "Un fornitore ha segnalato un data breach che potrebbe aver esposto i nostri dati",
+      "tool": "Stiamo adottando un nuovo strumento di project management per sostituire Jira"
+    }
   },
   "impact": {
     "title": "Impact",

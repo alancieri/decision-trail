@@ -2,7 +2,7 @@
 
 import { usePathname, useParams } from "next/navigation";
 import Link from "next/link";
-import { Shield, LayoutDashboard, FileText, Settings, LogOut, Users, SlidersHorizontal } from "lucide-react";
+import { Shield, LayoutDashboard, FileText, Settings, LogOut, Users, SlidersHorizontal, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -49,6 +49,12 @@ export function AppShell({ children, user, userRole }: AppShellProps) {
   const workspaceId = params?.workspaceId as string | undefined;
 
   const navItems = [
+    {
+      id: "new-decision",
+      label: t("nav.newDecision"),
+      icon: Sparkles,
+      href: workspaceId ? `/w/${workspaceId}/new-decision` : "#",
+    },
     {
       id: "dashboard",
       label: t("nav.dashboard"),
