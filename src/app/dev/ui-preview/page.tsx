@@ -19,6 +19,7 @@ import {
   Check,
   Moon,
   Sun,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -1519,6 +1520,264 @@ export default function UIPreviewPage() {
                 </div>
               </div>
             </div>
+          </section>
+
+          {/* ================================================================
+              NEW DECISION - AI INPUT VARIANTS
+              ================================================================ */}
+          <section id="new-decision" className="scroll-mt-20">
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>New Decision - AI Input</h2>
+              <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                Varianti per l&apos;interfaccia di input AI. L&apos;obiettivo è creare uno &quot;spazio di pensiero&quot; moderno, non un form tradizionale.
+              </p>
+            </div>
+
+            {/* Variante A: ChatGPT Style */}
+            <div className="space-y-4 mb-12">
+              <div>
+                <h3 className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Variante A: ChatGPT Style</h3>
+                <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
+                  Textarea con bordo, bottone integrato in basso a destra. Minimal, focus sul contenuto.
+                </p>
+              </div>
+              <div className="border rounded-xl p-8" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
+                <div className="flex flex-col items-center justify-center min-h-[400px]">
+                  <div className="w-full max-w-2xl">
+                    {/* Greeting */}
+                    <div className="text-center mb-8">
+                      <h1 className="text-2xl font-medium mb-2" style={{ color: "var(--text-primary)" }}>
+                        Cosa vuoi analizzare?
+                      </h1>
+                      <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
+                        Descrivi una decisione, un cambiamento o un evento
+                      </p>
+                    </div>
+
+                    {/* Input container */}
+                    <div className="relative">
+                      <Textarea
+                        placeholder="Es. Stiamo valutando di passare da Slack a Microsoft Teams..."
+                        className="min-h-[120px] pr-14 text-base resize-none rounded-xl"
+                        style={{ paddingBottom: "3.5rem" }}
+                      />
+                      {/* Button inside */}
+                      <div className="absolute bottom-3 right-3 flex items-center gap-2">
+                        <span className="text-xs tabular-nums" style={{ color: "var(--text-tertiary)" }}>0 / 5000</span>
+                        <Button size="icon" className="rounded-lg h-9 w-9" disabled>
+                          <ChevronRight className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Variante B: Claude Style */}
+            <div className="space-y-4 mb-12">
+              <div>
+                <h3 className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Variante B: Claude Style</h3>
+                <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
+                  Più ampio, con suggerimenti contestuali. Il bottone è esterno ma vicino.
+                </p>
+              </div>
+              <div className="border rounded-xl p-8" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
+                <div className="flex flex-col items-center justify-center min-h-[400px]">
+                  <div className="w-full max-w-3xl">
+                    {/* Header minimal */}
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: "var(--primary)", color: "white" }}>
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
+                        Analisi AI
+                      </span>
+                    </div>
+
+                    {/* Main input area */}
+                    <div className="space-y-4">
+                      <Textarea
+                        placeholder="Descrivi la decisione o il cambiamento che vuoi analizzare...
+
+Alcuni esempi:
+• Stiamo migrando il database da MySQL a PostgreSQL
+• Abbiamo deciso di permettere il lavoro remoto permanente
+• Un fornitore ha avuto un data breach"
+                        className="min-h-[200px] text-base resize-none border-2 rounded-xl focus:border-primary/50 transition-colors"
+                      />
+
+                      {/* Footer */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+                            L&apos;AI ti aiuterà a identificare gli impatti ISMS
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs tabular-nums" style={{ color: "var(--text-tertiary)" }}>0 / 5000</span>
+                          <Button className="gap-2" disabled>
+                            <Sparkles className="w-4 h-4" />
+                            Analizza
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Variante C: Linear/Raycast Style */}
+            <div className="space-y-4 mb-12">
+              <div>
+                <h3 className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Variante C: Linear/Raycast Style</h3>
+                <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
+                  Command palette feel. Compatto, elegante, con shortcut hint.
+                </p>
+              </div>
+              <div className="border rounded-xl p-8" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
+                <div className="flex flex-col items-center justify-center min-h-[400px]">
+                  <div className="w-full max-w-xl">
+                    {/* Card container */}
+                    <div className="border rounded-2xl shadow-lg overflow-hidden" style={{ borderColor: "var(--border)", backgroundColor: "var(--card)" }}>
+                      {/* Header */}
+                      <div className="px-4 py-3 border-b flex items-center gap-3" style={{ borderColor: "var(--border)" }}>
+                        <Sparkles className="w-5 h-5" style={{ color: "var(--primary)" }} />
+                        <span className="font-medium" style={{ color: "var(--text-primary)" }}>Nuova Decisione</span>
+                        <span className="ml-auto text-xs px-2 py-1 rounded-md" style={{ backgroundColor: "var(--muted)", color: "var(--text-tertiary)" }}>
+                          ⌘ Enter per inviare
+                        </span>
+                      </div>
+
+                      {/* Input */}
+                      <div className="p-4">
+                        <Textarea
+                          placeholder="Descrivi cosa è successo o cosa stai decidendo..."
+                          className="min-h-[140px] text-base resize-none border-0 focus-visible:ring-0 p-0 shadow-none"
+                        />
+                      </div>
+
+                      {/* Footer */}
+                      <div className="px-4 py-3 border-t flex items-center justify-between" style={{ borderColor: "var(--border)", backgroundColor: "var(--muted)" }}>
+                        <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+                          0 caratteri
+                        </span>
+                        <Button size="sm" className="gap-2" disabled>
+                          Analizza con AI
+                          <ChevronRight className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Variante D: Notion AI Style */}
+            <div className="space-y-4 mb-12">
+              <div>
+                <h3 className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Variante D: Notion AI Style</h3>
+                <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
+                  Ultra minimal. Niente bordi visibili, focus totale sul testo. Floating action.
+                </p>
+              </div>
+              <div className="border rounded-xl p-8" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
+                <div className="flex flex-col items-center justify-center min-h-[400px]">
+                  <div className="w-full max-w-2xl">
+                    {/* Floating label */}
+                    <div className="mb-4">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-full" style={{ backgroundColor: "var(--muted)", color: "var(--text-secondary)" }}>
+                        <Sparkles className="w-3.5 h-3.5" style={{ color: "var(--primary)" }} />
+                        AI Analysis
+                      </span>
+                    </div>
+
+                    {/* Clean textarea - no visible border */}
+                    <div className="relative">
+                      <Textarea
+                        placeholder="Inizia a scrivere..."
+                        className="min-h-[250px] text-lg resize-none border-0 focus-visible:ring-0 p-0 shadow-none placeholder:text-muted-foreground/50"
+                        style={{ lineHeight: "1.75" }}
+                      />
+                    </div>
+
+                    {/* Floating bottom bar */}
+                    <div className="fixed-bottom mt-8 flex items-center justify-between py-4 border-t" style={{ borderColor: "var(--border)" }}>
+                      <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
+                        Premi <kbd className="px-1.5 py-0.5 rounded text-xs font-mono" style={{ backgroundColor: "var(--muted)" }}>⌘</kbd> + <kbd className="px-1.5 py-0.5 rounded text-xs font-mono" style={{ backgroundColor: "var(--muted)" }}>↵</kbd> per analizzare
+                      </p>
+                      <div className="flex items-center gap-4">
+                        <span className="text-xs tabular-nums" style={{ color: "var(--text-tertiary)" }}>0 / 5000</span>
+                        <Button variant="outline" size="sm" className="gap-2" disabled>
+                          <Sparkles className="w-4 h-4" />
+                          Analizza
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Variante E: Perplexity Style */}
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Variante E: Perplexity Style</h3>
+                <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
+                  Search bar prominente con suggerimenti rapidi sotto. Invita all&apos;azione.
+                </p>
+              </div>
+              <div className="border rounded-xl p-8" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
+                <div className="flex flex-col items-center justify-center min-h-[400px]">
+                  <div className="w-full max-w-2xl text-center">
+                    {/* Big title */}
+                    <h1 className="text-3xl font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+                      Cosa vuoi analizzare?
+                    </h1>
+                    <p className="text-base mb-8" style={{ color: "var(--text-secondary)" }}>
+                      Descrivi una decisione e l&apos;AI identificherà gli impatti
+                    </p>
+
+                    {/* Search-like input */}
+                    <div className="relative mb-6">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                        <Sparkles className="w-5 h-5" style={{ color: "var(--text-tertiary)" }} />
+                      </div>
+                      <Input
+                        placeholder="Es. Stiamo cambiando provider cloud..."
+                        className="h-14 pl-12 pr-24 text-base rounded-2xl border-2"
+                      />
+                      <Button className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl" disabled>
+                        Analizza
+                      </Button>
+                    </div>
+
+                    {/* Quick suggestions */}
+                    <div className="flex flex-wrap justify-center gap-2">
+                      <button className="px-3 py-1.5 rounded-full text-sm border transition-colors hover:border-primary/50" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
+                        Cambio fornitore
+                      </button>
+                      <button className="px-3 py-1.5 rounded-full text-sm border transition-colors hover:border-primary/50" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
+                        Nuova policy
+                      </button>
+                      <button className="px-3 py-1.5 rounded-full text-sm border transition-colors hover:border-primary/50" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
+                        Incidente sicurezza
+                      </button>
+                      <button className="px-3 py-1.5 rounded-full text-sm border transition-colors hover:border-primary/50" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
+                        Nuovo strumento
+                      </button>
+                    </div>
+
+                    {/* Expand hint */}
+                    <p className="mt-6 text-xs" style={{ color: "var(--text-tertiary)" }}>
+                      Per descrizioni più lunghe, premi <kbd className="px-1 py-0.5 rounded text-xs" style={{ backgroundColor: "var(--muted)" }}>Shift + Enter</kbd>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </section>
 
         </div>
