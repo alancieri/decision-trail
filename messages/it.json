@@ -27,7 +27,8 @@
     "magicLinkSent": "Ti abbiamo inviato un link magico. Clicca sul link nell'email per accedere.",
     "magicLinkInfo": "Nessuna password da ricordare. Ti invieremo un link sicuro via email.",
     "sendMagicLink": "Invia link di accesso",
-    "useDifferentEmail": "Usa un'altra email"
+    "useDifferentEmail": "Usa un'altra email",
+    "registrationClosed": "Registrazioni chiuse. Contatta l'amministratore per ricevere un invito."
   },
   "workspace": {
     "title": "Workspace",
@@ -216,5 +217,76 @@
     "accountInfo": "Informazioni account",
     "memberSince": "Membro dal",
     "saved": "Modifiche salvate con successo"
+  },
+  "landing": {
+    "hero": {
+      "headline1": "Make impact visible",
+      "headline2": "before it becomes a problem.",
+      "subheadline": "Decision Trail ti aiuta a catturare decisioni, cambiamenti e incidenti quotidiani — e a ragionare sul loro potenziale impatto ISMS prima che degenerino.",
+      "seeHow": "Scopri come funziona",
+      "screenshotPlaceholder": "Screenshot in arrivo"
+    },
+    "problem": {
+      "title": "La maggior parte dei problemi ISMS non nascono come incidenti.",
+      "intro": "Nascono come piccole decisioni:",
+      "item1": "cambiare uno strumento",
+      "item2": "modificare una regola di accesso",
+      "item3": "inserire un nuovo fornitore",
+      "item4": "saltare un controllo \"solo questa volta\"",
+      "conclusion": "Senza una chiara traccia del ragionamento, queste decisioni diventano difficili da spiegare — specialmente dopo, durante review o audit."
+    },
+    "whatItDoes": {
+      "title": "Decision Trail crea una traccia di ragionamento, non solo un log.",
+      "subtitle": "Ogni decisione lascia una traccia. Decision Trail ti aiuta a rendere quella traccia significativa, strutturata e pronta per quando serve davvero.",
+      "item1": {
+        "title": "Cattura in tempo reale",
+        "description": "Registra decisioni, cambiamenti e near-miss mentre accadono — prima che il contesto vada perso."
+      },
+      "item2": {
+        "title": "Ragionamento assistito dall'AI",
+        "description": "Ricevi aiuto per identificare le aree ISMS potenzialmente impattate e porre le domande giuste."
+      },
+      "item3": {
+        "title": "Auditabile by design",
+        "description": "Mantieni una traccia chiara del perché di ogni decisione — pronta per review e audit."
+      },
+      "item4": {
+        "title": "L'umano è in controllo",
+        "description": "Nulla è automatico. Rivedi, modifica e decidi tu cosa documentare."
+      }
+    },
+    "howItWorks": {
+      "title": "Come funziona",
+      "step1": {
+        "title": "Descrivi cosa è successo",
+        "description": "Scrivi una breve descrizione testuale di una decisione o evento."
+      },
+      "step2": {
+        "title": "Ottieni un ragionamento guidato",
+        "description": "L'AI ti aiuta a riformulare la situazione, porre le domande giuste e evidenziare le aree che potrebbero richiedere attenzione."
+      },
+      "step3": {
+        "title": "Decidi e documenta",
+        "description": "Rimani tu in controllo. Rivedi, modifica e salva la traccia del ragionamento."
+      }
+    },
+    "whoFor": {
+      "title": "A chi è rivolto Decision Trail",
+      "intro": "Decision Trail è progettato per:",
+      "item1": "CTO e Technical Lead",
+      "item2": "ISMS / Information Security Manager",
+      "item3": "Team di startup e scale-up attenti alla sicurezza",
+      "conclusion": "Se sei responsabile di decisioni che potrebbero impattare sicurezza o compliance, Decision Trail si inserisce naturalmente nel tuo workflow."
+    },
+    "whatItIsNot": {
+      "title": "Cosa NON è Decision Trail",
+      "item1": "Non è uno strumento di certificazione",
+      "item2": "Non è un motore automatico di compliance",
+      "item3": "Non è un sostituto del giudizio umano",
+      "conclusion": "Decision Trail supporta il pensiero — non sostituisce la responsabilità."
+    },
+    "earlyStage": {
+      "text": "Decision Trail è attualmente in early access e si evolve attraverso l'uso reale e il feedback degli utenti."
+    }
   }
 }

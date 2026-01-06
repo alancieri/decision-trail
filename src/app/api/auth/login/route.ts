@@ -58,7 +58,24 @@ export async function POST(request: Request) {
     );
 
     if (!userExists) {
-      console.log("[Login API] Creating new user:", email);
+      // Check if user has a pending invitation
+      const { data: pendingInvite } = await supabaseAdmin
+        .from("workspace_invitations")
+        .select("id")
+        .eq("email", email.toLowerCase())
+        .eq("status", "pending")
+        .limit(1)
+        .single();
+
+      if (!pendingInvite) {
+        console.log("[Login API] Registration blocked - no invitation for:", email);
+        return NextResponse.json(
+          { error: "Registrazioni chiuse. Contatta l'amministratore per ricevere un invito." },
+          { status: 403 }
+        );
+      }
+
+      console.log("[Login API] Creating new user with invitation:", email);
       const { error: createError } = await supabaseAdmin.auth.admin.createUser({
         email: email.toLowerCase(),
         email_confirm: true, // Pre-confirm to avoid Supabase sending confirmation email
