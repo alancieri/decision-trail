@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     if (!userExists) {
       // Check if user has a pending invitation
       const { data: pendingInvite } = await supabaseAdmin
-        .from("workspace_invitations")
+        .from("workspace_invitation")
         .select("id")
         .eq("email", email.toLowerCase())
         .eq("status", "pending")
