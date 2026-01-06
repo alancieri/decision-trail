@@ -52,7 +52,7 @@ interface ImpactAssistResponse {
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-user-token",
 };
 
 // -----------------------------------------------------------------------------
@@ -91,27 +91,32 @@ serve(async (req: Request) => {
   }
 
   try {
-    // Verify authentication
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
+    // WORKAROUND: Supabase Edge Functions don't support ES256 JWT verification yet.
+    // The client passes anon key in Authorization header (to bypass platform check)
+    // and the actual user token in x-user-token header.
+    // See: docs/notes/jwt-es256-workaround.md
+    const userToken = req.headers.get("x-user-token");
+    if (!userToken) {
       return new Response(
-        JSON.stringify({ error: "Missing authorization header" }),
+        JSON.stringify({ error: "Missing user token", code: 401 }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Create Supabase client to verify user
+    // Create Supabase client with user token to verify authentication
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } },
+
+    // Client for auth verification and RPC calls (uses user token)
+    const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: `Bearer ${userToken}` } },
     });
 
-    // Get user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    // Verify user authentication
+    const { data: { user }, error: userError } = await authClient.auth.getUser();
     if (userError || !user) {
       return new Response(
-        JSON.stringify({ error: "Unauthorized" }),
+        JSON.stringify({ error: "Invalid JWT", code: 401 }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -135,15 +140,19 @@ serve(async (req: Request) => {
       );
     }
 
-    // Verify user has access to workspace
-    const { data: membership, error: memberError } = await supabase
-      .from("workspace_member")
-      .select("id")
-      .eq("workspace_id", workspaceId)
-      .eq("user_id", user.id)
-      .single();
+    // Verify user has access to workspace using RPC (SECURITY DEFINER bypasses RLS)
+    const { data: hasMembership, error: memberError } = await authClient.rpc(
+      "check_workspace_membership",
+      { p_workspace_id: workspaceId, p_user_id: user.id }
+    );
 
-    if (memberError || !membership) {
+    if (memberError || !hasMembership) {
+      console.error("Membership check failed:", {
+        workspaceId,
+        userId: user.id,
+        error: memberError?.message,
+        hasMembership
+      });
       return new Response(
         JSON.stringify({ error: "Access denied to this workspace" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }

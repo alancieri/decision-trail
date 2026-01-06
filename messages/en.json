@@ -101,6 +101,13 @@
     "subtitle": "Describe a decision and AI will identify potential impacts",
     "placeholder": "E.g., We're switching from Slack to Microsoft Teams...",
     "analyzeButton": "Analyze",
+    "processing": "Analyzing your input...",
+    "processingHint": "AI is identifying potential ISMS impacts",
+    "errorTitle": "Something went wrong",
+    "errorMessage": "We couldn't analyze your input. You can retry or continue manually.",
+    "errorHelp": "If the problem persists, you can continue without AI and fill in the details yourself.",
+    "retryButton": "Try again",
+    "continueManuallyButton": "Continue without AI",
     "suggestions": {
       "vendor": "Vendor change",
       "policy": "New policy",

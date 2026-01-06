@@ -102,6 +102,13 @@
     "subtitle": "Descrivi una decisione e l'AI identificherà i potenziali impatti",
     "placeholder": "Es. Stiamo passando da Slack a Microsoft Teams...",
     "analyzeButton": "Analizza",
+    "processing": "Analisi in corso...",
+    "processingHint": "L'AI sta identificando i potenziali impatti ISMS",
+    "errorTitle": "Qualcosa è andato storto",
+    "errorMessage": "Non siamo riusciti ad analizzare il tuo input. Puoi riprovare o continuare manualmente.",
+    "errorHelp": "Se il problema persiste, puoi continuare senza AI e compilare i dettagli manualmente.",
+    "retryButton": "Riprova",
+    "continueManuallyButton": "Continua senza AI",
     "suggestions": {
       "vendor": "Cambio fornitore",
       "policy": "Nuova policy",
