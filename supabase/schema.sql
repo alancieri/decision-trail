@@ -129,13 +129,17 @@ CREATE TABLE IF NOT EXISTS impact (
   created_by UUID NOT NULL REFERENCES auth.users(id) ON DELETE RESTRICT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  archived_at TIMESTAMPTZ  -- soft delete
+  archived_at TIMESTAMPTZ,  -- soft delete
+  -- AI fields (B1)
+  ai_context TEXT,  -- AI-generated context explaining impact on the system
+  ai_generated BOOLEAN NOT NULL DEFAULT false  -- True if created with AI assistance
 );
 
 CREATE INDEX IF NOT EXISTS idx_impact_workspace ON impact(workspace_id);
 CREATE INDEX IF NOT EXISTS idx_impact_created_by ON impact(created_by);
 CREATE INDEX IF NOT EXISTS idx_impact_created_at ON impact(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_impact_archived ON impact(archived_at) WHERE archived_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_impact_ai_generated ON impact(ai_generated) WHERE ai_generated = true;
 
 -- 3.3 impact_area_state (stato di ogni area per ogni impact)
 CREATE TABLE IF NOT EXISTS impact_area_state (
@@ -403,7 +407,9 @@ RETURNS TABLE (
   areas_impacted BIGINT,
   areas_not_impacted BIGINT,
   actions_open BIGINT,
-  actions_done BIGINT
+  actions_done BIGINT,
+  ai_context TEXT,
+  ai_generated BOOLEAN
 ) AS $$
 BEGIN
   -- Verifica accesso al workspace
@@ -435,7 +441,9 @@ BEGIN
     COUNT(*) FILTER (WHERE ias.state = 'impacted') as areas_impacted,
     COUNT(*) FILTER (WHERE ias.state = 'not_impacted') as areas_not_impacted,
     (SELECT COUNT(*) FROM impact_action ia WHERE ia.impact_id = i.id AND ia.status = 'open') as actions_open,
-    (SELECT COUNT(*) FROM impact_action ia WHERE ia.impact_id = i.id AND ia.status = 'done') as actions_done
+    (SELECT COUNT(*) FROM impact_action ia WHERE ia.impact_id = i.id AND ia.status = 'done') as actions_done,
+    i.ai_context,
+    i.ai_generated
   FROM impact i
   JOIN profiles p ON p.id = i.created_by
   LEFT JOIN impact_area_state ias ON ias.impact_id = i.id
@@ -451,7 +459,9 @@ CREATE OR REPLACE FUNCTION create_impact(
   ws_id UUID,
   p_title TEXT,
   p_description TEXT DEFAULT NULL,
-  p_source_type impact_source_type DEFAULT NULL
+  p_source_type impact_source_type DEFAULT NULL,
+  p_ai_context TEXT DEFAULT NULL,
+  p_ai_generated BOOLEAN DEFAULT false
 )
 RETURNS UUID AS $$
 DECLARE
@@ -466,9 +476,9 @@ BEGIN
     RAISE EXCEPTION 'Access denied to this workspace';
   END IF;
 
-  -- Crea impact
-  INSERT INTO impact (workspace_id, title, description, source_type, created_by)
-  VALUES (ws_id, p_title, p_description, p_source_type, auth.uid())
+  -- Crea impact with AI fields
+  INSERT INTO impact (workspace_id, title, description, source_type, created_by, ai_context, ai_generated)
+  VALUES (ws_id, p_title, p_description, p_source_type, auth.uid(), p_ai_context, p_ai_generated)
   RETURNING id INTO new_impact_id;
 
   -- Crea stati area iniziali (tutti to_review)
@@ -494,7 +504,9 @@ RETURNS TABLE (
   created_by_email TEXT,
   created_by_name TEXT,
   created_at TIMESTAMPTZ,
-  updated_at TIMESTAMPTZ
+  updated_at TIMESTAMPTZ,
+  ai_context TEXT,
+  ai_generated BOOLEAN
 ) AS $$
 DECLARE
   areas_to_review_count BIGINT;
@@ -542,7 +554,9 @@ BEGIN
     p.email as created_by_email,
     p.display_name as created_by_name,
     i.created_at,
-    i.updated_at
+    i.updated_at,
+    i.ai_context,
+    i.ai_generated
   FROM impact i
   JOIN profiles p ON p.id = i.created_by
   WHERE i.id = p_impact_id;

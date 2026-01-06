@@ -16,6 +16,8 @@ export type Database = {
     Tables: {
       impact: {
         Row: {
+          ai_context: string | null
+          ai_generated: boolean
           archived_at: string | null
           created_at: string
           created_by: string
@@ -27,6 +29,8 @@ export type Database = {
           workspace_id: string
         }
         Insert: {
+          ai_context?: string | null
+          ai_generated?: boolean
           archived_at?: string | null
           created_at?: string
           created_by: string
@@ -38,6 +42,8 @@ export type Database = {
           workspace_id: string
         }
         Update: {
+          ai_context?: string | null
+          ai_generated?: boolean
           archived_at?: string | null
           created_at?: string
           created_by?: string
@@ -352,6 +358,8 @@ export type Database = {
       }
       create_impact: {
         Args: {
+          p_ai_context?: string
+          p_ai_generated?: boolean
           p_description?: string
           p_source_type?: Database["public"]["Enums"]["impact_source_type"]
           p_title: string
@@ -364,6 +372,8 @@ export type Database = {
       get_impact_detail: {
         Args: { p_impact_id: string }
         Returns: {
+          ai_context: string | null
+          ai_generated: boolean
           created_at: string
           created_by: string
           created_by_email: string
@@ -392,6 +402,8 @@ export type Database = {
         Returns: {
           actions_done: number
           actions_open: number
+          ai_context: string | null
+          ai_generated: boolean
           areas_impacted: number
           areas_not_impacted: number
           areas_to_review: number
