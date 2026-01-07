@@ -106,7 +106,7 @@ export function AppShell({ children, user, userRole }: AppShellProps) {
         style={{ backgroundColor: "var(--card)" }}
       >
         {/* Logo */}
-        <div className="p-4 border-b border-border/50">
+        <div className="p-4">
           <Link href="/" className="flex items-center gap-2">
             <Shield className="w-6 h-6 text-primary" strokeWidth={2.5} />
             <span className="font-semibold" style={{ color: "var(--text-primary)" }}>
@@ -114,9 +114,6 @@ export function AppShell({ children, user, userRole }: AppShellProps) {
             </span>
           </Link>
         </div>
-
-        {/* Workspace Selector */}
-        <WorkspaceSelector />
 
         {/* Navigation */}
         <nav className="flex-1 p-2 flex flex-col">
@@ -153,7 +150,7 @@ export function AppShell({ children, user, userRole }: AppShellProps) {
 
           {/* Workspace Actions - only for owners */}
           {userRole === "owner" && (
-            <div className="mt-auto pt-2 border-t border-border/50 space-y-1">
+            <div className="mt-auto -mx-2 px-2 pt-2 border-t border-border/50 space-y-1">
               <p
                 className="px-3 py-1 text-xs font-medium uppercase tracking-wider"
                 style={{ color: "var(--text-tertiary)" }}
@@ -183,11 +180,15 @@ export function AppShell({ children, user, userRole }: AppShellProps) {
 
       {/* Main Area with Header */}
       <div className="flex-1 flex flex-col min-h-screen">
-        {/* Top Header with User Menu */}
+        {/* Top Header with Workspace Selector and User Menu */}
         <header
-          className="h-14 border-b px-6 flex items-center justify-end sticky top-0 z-10"
-          style={{ borderColor: "var(--border)", backgroundColor: "var(--card)" }}
+          className="h-14 border-b border-border/50 px-6 flex items-center justify-between sticky top-0 z-10"
+          style={{ backgroundColor: "var(--card)" }}
         >
+          {/* Left side - Workspace Selector */}
+          <WorkspaceSelector variant="header" />
+
+          {/* Right side - User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="p-1.5 rounded-md hover:bg-muted transition-colors">

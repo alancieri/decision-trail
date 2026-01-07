@@ -27,6 +27,10 @@ interface Workspace {
   created_at: string;
 }
 
+interface WorkspaceSelectorProps {
+  variant?: "sidebar" | "header";
+}
+
 function getInitials(name: string): string {
   return name
     .split(" ")
@@ -36,7 +40,7 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-export function WorkspaceSelector() {
+export function WorkspaceSelector({ variant = "sidebar" }: WorkspaceSelectorProps) {
   const t = useTranslations();
   const router = useRouter();
   const params = useParams();
@@ -83,10 +87,86 @@ export function WorkspaceSelector() {
   };
 
   if (isLoading) {
+    if (variant === "header") {
+      return <div className="w-32 h-8 rounded bg-muted animate-pulse" />;
+    }
     return (
       <div className="p-3 border-b border-border/50">
         <div className="w-full h-9 rounded bg-muted animate-pulse" />
       </div>
+    );
+  }
+
+  const dropdownContent = (
+    <DropdownMenuContent align="start" className="w-52">
+      <DropdownMenuLabel>{t("workspace.switchTo")}</DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      {workspaces.map((workspace) => (
+        <DropdownMenuItem
+          key={workspace.id}
+          onClick={() => handleSelectWorkspace(workspace.id)}
+          className="cursor-pointer"
+        >
+          {workspace.id === currentWorkspaceId ? (
+            <Check className="w-4 h-4 mr-2" />
+          ) : (
+            <span className="w-4 h-4 mr-2" />
+          )}
+          <span className="flex-1 truncate">{workspace.name}</span>
+          {workspace.id === currentWorkspaceId && (
+            <span
+              className="text-[10px] px-1.5 py-0.5 rounded ml-2"
+              style={{
+                backgroundColor: "var(--muted)",
+                color: "var(--text-tertiary)",
+              }}
+            >
+              {t("workspace.current")}
+            </span>
+          )}
+        </DropdownMenuItem>
+      ))}
+      <DropdownMenuSeparator />
+      <DropdownMenuItem
+        onClick={() => setIsCreateDialogOpen(true)}
+        className="cursor-pointer"
+      >
+        <Plus className="w-4 h-4 mr-2" />
+        {t("workspace.create")}
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  );
+
+  if (variant === "header") {
+    return (
+      <>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 px-2 gap-2"
+              disabled={isPending}
+            >
+              <div className="w-5 h-5 rounded bg-primary/10 flex items-center justify-center">
+                <span className="text-[10px] font-semibold text-primary">
+                  {currentWorkspace ? getInitials(currentWorkspace.name) : "?"}
+                </span>
+              </div>
+              <span className="text-sm font-medium truncate max-w-[120px]">
+                {currentWorkspace?.name || t("workspace.title")}
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          {dropdownContent}
+        </DropdownMenu>
+
+        <CreateWorkspaceDialog
+          open={isCreateDialogOpen}
+          onOpenChange={setIsCreateDialogOpen}
+          onWorkspaceCreated={handleWorkspaceCreated}
+        />
+      </>
     );
   }
 
@@ -113,43 +193,7 @@ export function WorkspaceSelector() {
               <ChevronDown className="w-4 h-4 text-muted-foreground" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-52">
-            <DropdownMenuLabel>{t("workspace.switchTo")}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {workspaces.map((workspace) => (
-              <DropdownMenuItem
-                key={workspace.id}
-                onClick={() => handleSelectWorkspace(workspace.id)}
-                className="cursor-pointer"
-              >
-                {workspace.id === currentWorkspaceId ? (
-                  <Check className="w-4 h-4 mr-2" />
-                ) : (
-                  <span className="w-4 h-4 mr-2" />
-                )}
-                <span className="flex-1 truncate">{workspace.name}</span>
-                {workspace.id === currentWorkspaceId && (
-                  <span
-                    className="text-[10px] px-1.5 py-0.5 rounded ml-2"
-                    style={{
-                      backgroundColor: "var(--muted)",
-                      color: "var(--text-tertiary)",
-                    }}
-                  >
-                    {t("workspace.current")}
-                  </span>
-                )}
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => setIsCreateDialogOpen(true)}
-              className="cursor-pointer"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              {t("workspace.create")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+          {dropdownContent}
         </DropdownMenu>
       </div>
 
