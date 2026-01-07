@@ -4,12 +4,10 @@ import { useState, useCallback } from "react";
 import { InputState } from "./states/input-state";
 import { ProcessingState } from "./states/processing-state";
 import { ErrorState } from "./states/error-state";
+import { ChatState, type AnswerValue } from "./states/chat-state";
+import { SummaryState } from "./states/summary-state";
 import { analyzeDecision, ImpactAssistError } from "@/lib/api/impact-assist";
-import type {
-  NewDecisionState,
-  ImpactAssistResponse,
-  NewDecisionPreviewState,
-} from "@/types/ai";
+import type { NewDecisionState, ImpactAssistResponse } from "@/types/ai";
 
 interface NewDecisionWorkspaceProps {
   workspaceId: string;
@@ -20,9 +18,11 @@ export function NewDecisionWorkspace({ workspaceId }: NewDecisionWorkspaceProps)
   const [state, setState] = useState<NewDecisionState>("input");
   const [freeText, setFreeText] = useState("");
 
-  // AI response (will be used in U4 for preview)
-  const [, setAiResponse] = useState<ImpactAssistResponse | null>(null);
-  const [, setPreviewState] = useState<NewDecisionPreviewState | null>(null);
+  // AI response
+  const [aiResponse, setAiResponse] = useState<ImpactAssistResponse | null>(null);
+
+  // Answers to clarifying questions
+  const [answers, setAnswers] = useState<Record<number, AnswerValue>>({});
 
   // Handle analyze button click
   const handleAnalyze = useCallback(async () => {
@@ -37,22 +37,7 @@ export function NewDecisionWorkspace({ workspaceId }: NewDecisionWorkspaceProps)
       });
 
       setAiResponse(response);
-
-      // Transform AI response into editable preview state
-      setPreviewState({
-        originalFreeText: freeText.trim(),
-        summary: response.summary,
-        aiContext: response.ai_context,
-        clarifyingQuestions: response.clarifying_questions,
-        areaSuggestions: response.area_suggestions,
-        draftActions: response.suggested_actions.map((action) => ({
-          description: action.description,
-          area_key: action.area_key,
-          included: true, // All actions included by default
-        })),
-      });
-
-      setState("preview");
+      setState("chat");
     } catch (error) {
       console.error("Failed to analyze decision:", error);
 
@@ -69,36 +54,62 @@ export function NewDecisionWorkspace({ workspaceId }: NewDecisionWorkspaceProps)
     handleAnalyze();
   }, [handleAnalyze]);
 
-  // Handle "Continue without AI" - go to preview with empty state
+  // Handle "Continue without AI" - go directly to Impact Detail with empty state
   const handleContinueManually = useCallback(() => {
-    setAiResponse(null);
-
-    // Create empty preview state for manual entry
-    setPreviewState({
-      originalFreeText: freeText.trim(),
-      summary: "", // User fills this
-      aiContext: "", // User fills this
-      clarifyingQuestions: [], // No AI questions
-      areaSuggestions: {
-        // All areas start as to_review
-        asset_tools: "to_review",
-        information_data: "to_review",
-        access_privileges: "to_review",
-        process_controls: "to_review",
-        risk_impact: "to_review",
-        policies_docs: "to_review",
-        people_awareness: "to_review",
-      },
-      draftActions: [], // No suggested actions
-    });
-
-    setState("preview");
-  }, [freeText]);
+    // TODO: Create empty Impact and redirect to detail page
+    // For now, just go back to input
+    setState("input");
+  }, []);
 
   // Handle going back to input
   const handleBackToInput = useCallback(() => {
     setState("input");
+    setAiResponse(null);
+    setAnswers({});
   }, []);
+
+  // Handle chat completion (all questions answered)
+  const handleChatComplete = useCallback((newAnswers: Record<number, AnswerValue>) => {
+    setAnswers(newAnswers);
+    setState("summary");
+  }, []);
+
+  // Handle back from summary to chat
+  const handleBackToChat = useCallback(() => {
+    setState("chat");
+  }, []);
+
+  // Handle continue from summary - create Impact and redirect to detail
+  const handleContinueToImpact = useCallback(async () => {
+    if (!aiResponse) return;
+
+    setState("creating");
+
+    try {
+      // TODO: U5 will implement finalizeImpact() + DB insert
+      // For now, simulate creation and redirect
+      // const impact = await createImpact({
+      //   workspaceId,
+      //   summary: aiResponse.summary,
+      //   aiContext: aiResponse.ai_context,
+      //   areaSuggestions: aiResponse.area_suggestions,
+      //   suggestedActions: aiResponse.suggested_actions,
+      //   answers,
+      //   originalFreeText: freeText,
+      // });
+      // router.push(`/impacts/${impact.id}`);
+
+      // Temporary: show alert and reset
+      alert("Impact created! (This will redirect to Impact Detail in U5)");
+      setState("input");
+      setFreeText("");
+      setAiResponse(null);
+      setAnswers({});
+    } catch (error) {
+      console.error("Failed to create impact:", error);
+      setState("summary"); // Go back to summary on error
+    }
+  }, [aiResponse]);
 
   // Render based on current state
   switch (state) {
@@ -130,30 +141,58 @@ export function NewDecisionWorkspace({ workspaceId }: NewDecisionWorkspaceProps)
         </div>
       );
 
-    case "preview":
-      // U4 will implement the preview state
-      // For now, show a placeholder that allows going back
-      return (
-        <div className="flex-1 flex flex-col items-center justify-center p-6">
-          <div className="text-center">
-            <p style={{ color: "var(--text-secondary)" }}>
-              Preview state (U4) - Coming soon
-            </p>
-            <button
-              onClick={handleBackToInput}
-              className="mt-4 text-primary underline"
-            >
-              Back to input
-            </button>
+    case "chat":
+      if (!aiResponse) {
+        // Should not happen, but fallback to input
+        return (
+          <div className="flex-1 flex flex-col">
+            <InputState
+              freeText={freeText}
+              onFreeTextChange={setFreeText}
+              onAnalyze={handleAnalyze}
+            />
           </div>
-        </div>
+        );
+      }
+      return (
+        <ChatState
+          aiResponse={aiResponse}
+          onComplete={handleChatComplete}
+          onBack={handleBackToInput}
+        />
+      );
+
+    case "summary":
+      if (!aiResponse) {
+        // Should not happen, but fallback to input
+        return (
+          <div className="flex-1 flex flex-col">
+            <InputState
+              freeText={freeText}
+              onFreeTextChange={setFreeText}
+              onAnalyze={handleAnalyze}
+            />
+          </div>
+        );
+      }
+      return (
+        <SummaryState
+          aiResponse={aiResponse}
+          onContinue={handleContinueToImpact}
+          onBack={handleBackToChat}
+        />
       );
 
     case "creating":
-      // U5 will implement the creating state
       return (
         <div className="flex-1 flex flex-col items-center justify-center p-6">
-          <p style={{ color: "var(--text-secondary)" }}>Creating impact...</p>
+          <div className="flex items-center gap-3">
+            <div
+              className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin"
+              style={{ borderColor: "var(--primary)", borderTopColor: "transparent" }}
+            />
+            <p style={{ color: "var(--text-secondary)" }}>Creating Impact...</p>
+          </div>
         </div>
       );
 
