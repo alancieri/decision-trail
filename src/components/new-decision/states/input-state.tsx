@@ -41,10 +41,7 @@ export function InputState({
     <div className="flex-1 flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-2xl text-center">
         {/* Title */}
-        <h1
-          className="text-3xl font-semibold mb-2"
-          style={{ color: "var(--text-primary)" }}
-        >
+        <h1 className="heading-1 mb-2">
           {t("title")}
         </h1>
         <p className="text-base mb-8" style={{ color: "var(--text-secondary)" }}>

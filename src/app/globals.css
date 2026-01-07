@@ -266,29 +266,52 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  h1 {
-    @apply text-3xl font-bold tracking-tight;
-    color: var(--text-primary);
-  }
-  h2 {
-    @apply text-2xl font-semibold tracking-tight;
-    color: var(--text-primary);
-  }
-  h3 {
-    @apply text-xl font-semibold;
-    color: var(--text-primary);
-  }
-  h4 {
-    @apply text-lg font-medium;
-    color: var(--text-primary);
-  }
 }
 
 /* =============================================================================
    COMPONENT STYLES
    ============================================================================= */
 @layer components {
+  /* ==========================================================================
+     TYPOGRAPHY SYSTEM
+     Use these classes explicitly for consistent typography across the app.
+     Default body text is 16px (1rem) - no class needed.
+     ========================================================================== */
+
+  /* Page titles - large headings */
+  .heading-1 {
+    @apply text-3xl font-bold tracking-tight;
+    color: var(--text-primary);
+  }
+
+  /* Section titles */
+  .heading-2 {
+    @apply text-2xl font-semibold tracking-tight;
+    color: var(--text-primary);
+  }
+
+  /* Subsection titles */
+  .heading-3 {
+    @apply text-xl font-semibold;
+    color: var(--text-primary);
+  }
+
+  /* Card/component titles */
+  .heading-4 {
+    @apply text-lg font-medium;
+    color: var(--text-primary);
+  }
+
+  /* Small body text */
+  .body-sm {
+    @apply text-sm;
+  }
+
+  /* Extra small text (labels, hints) */
+  .body-xs {
+    @apply text-xs;
+  }
+
   /* Impact state badges */
   .badge-to-review {
     background-color: var(--state-to-review-soft);

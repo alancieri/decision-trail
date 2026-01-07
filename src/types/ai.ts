@@ -158,7 +158,8 @@ export interface ImpactDetailWithAI {
 export type NewDecisionState =
   | "input" // User is typing
   | "processing" // AI is analyzing
-  | "preview" // Showing AI results for review
+  | "chat" // Interactive Q&A with AI
+  | "summary" // Read-only summary before creating
   | "error" // AI call failed
   | "creating"; // Persisting to database
 
